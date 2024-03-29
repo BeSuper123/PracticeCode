@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #define SIZE 6
 #define LENGTH 20
@@ -30,37 +31,53 @@ struct department {
 };
 
 // function assignments
-void displayIssueReport(int[][MAXLENGTH][MAXLENGTH]);
+void displayIssueReport(struct department **);
 void displaySortedDepartment(struct department *);
 void mergeSort(struct department *, int, int);
 void merge(struct department *, int, int, int);
 
 int main() {
     int i, size;
-    int issueReport[MAXLENGTH][MAXLENGTH][MAXLENGTH];
+    struct department *issueReport[SIZE];
     struct department employees[SIZE] = {
         {2, 796, {4, 12, 15.05}, 23, {202, "Issue Desc..."}, {23, "Resolution Desc..."}, 101},
-        {4, 648, {6, 2, 20.55}, 39, {308, "Issue Desc..."}, {69, "Resolution Desc..."}, 102},
-        {6, 408, {28, 4, 16.45}, 18, {724, "Issue Desc..."}, {23, "Resolution Desc..."}, 103},
-        {8, 384, {23, 11, 9.38}, 50, {592, "Issue Desc..."}, {18, "Resolution Desc..."}, 104},
-        {3, 497, {13, 9, 18.27}, 84, {365, "Issue Desc..."}, {38, "Resolution Desc..."}, 105},
-        {5, 297, {2, 3, 11.15}, 59, {104, "Issue Desc..."}, {49, "Resolution Desc..."}, 106}
+        {4, 648, {6, 2, 20.55}, 84, {308, "Issue Desc..."}, {69, "Resolution Desc..."}, 102},
+        {6, 408, {28, 4, 16.45}, 39, {724, "Issue Desc..."}, {23, "Resolution Desc..."}, 103},
+        {8, 384, {23, 11, 9.38}, 27, {592, "Issue Desc..."}, {18, "Resolution Desc..."}, 104},
+        {3, 497, {13, 9, 18.27}, 51, {365, "Issue Desc..."}, {38, "Resolution Desc..."}, 105},
+        {5, 297, {2, 3, 11.15}, 18, {104, "Issue Desc..."}, {49, "Resolution Desc..."}, 106}
     };
 
-    for (i = 0; i < SIZE; i++) {
-        issueReport[employees[i].productID][employees[i].lineCode][employees[i].issue.code]++;
+    for (i = 0; i < SIZE; i++) 
+    {
+        issueReport[i] = (struct department *)malloc(sizeof(struct department));
+        
+        if (issueReport[i] != NULL)
+        {
+            issueReport[i]->productID = employees[i].productID;
+            issueReport[i]->issue.code = employees[i].issue.code;
+            issueReport[i]->lineCode = employees[i].lineCode;
+        }
+    } 
 
-    } // end for
-
-    
+    // uses the size to merge the 
     size = sizeof(employees) / sizeof(employees[0]);
     mergeSort(employees, 0, size - 1);
 
     printf("--------Data--------\n\n");
     displaySortedDepartment(employees);
 
-    printf("\n\n------Issue Report------");
+    printf("\n\n------Issue Report------\n");
     displayIssueReport(issueReport);
+
+    // Remember to use and eventually free the allocated memory for issueReport
+    for (i = 0; i < SIZE; i++) {
+        if (issueReport[i] != NULL) {
+            free(issueReport[i]);
+
+        } // end if
+
+    } // end for
 
     return 0;
 
@@ -105,9 +122,13 @@ void merge(struct department emp[], int low, int mid, int high) {
     // merges the temp arrays back to emp
     while (i < ptrL && j < ptrR) {
         // compares the values by date and time
-        if (LEFT[i].batchDateTime.month < RIGHT[j].batchDateTime.month || 
-        LEFT[i].batchDateTime.month == RIGHT[i].batchDateTime.month && LEFT[i].batchDateTime.day < RIGHT[i].batchDateTime.day ||
-        LEFT[i].batchDateTime.month == RIGHT[i].batchDateTime.month && LEFT[i].batchDateTime.day == RIGHT[i].batchDateTime.day && 
+        if (LEFT[i].productID < RIGHT[j].productID || 
+        LEFT[i].productID == RIGHT[i].productID && LEFT[i].issue.code < RIGHT[i].issue.code ||
+        LEFT[i].productID == RIGHT[i].productID && LEFT[i].issue.code == RIGHT[i].issue.code && LEFT[i].batchDateTime.month < RIGHT[j].batchDateTime.month || 
+        LEFT[i].productID == RIGHT[i].productID && LEFT[i].issue.code == RIGHT[i].issue.code && LEFT[i].batchDateTime.month == RIGHT[i].batchDateTime.month &&
+        LEFT[i].batchDateTime.day < RIGHT[i].batchDateTime.day ||
+        LEFT[i].productID == RIGHT[i].productID && LEFT[i].issue.code == RIGHT[i].issue.code && LEFT[i].batchDateTime.month == RIGHT[i].batchDateTime.month && 
+        LEFT[i].batchDateTime.day == RIGHT[i].batchDateTime.day && 
         LEFT[i].batchDateTime.hourandMin < RIGHT[i].batchDateTime.hourandMin) {
             emp[k++] = LEFT[i++];
 
@@ -148,18 +169,12 @@ void displaySortedDepartment(struct department emp[]) {
 
 // TASK 2
 // displays the departments one by one
-void displayIssueReport(int issueReport[][MAXLENGTH][MAXLENGTH]) {
-    int i, j, k;
-    for (i = 0; i < MAXLENGTH; i++) {
-        for (j = 0; j < MAXLENGTH; j++) {
-            for (k = 0; k < MAXLENGTH; k++) {
-                if (issueReport[i][j][k] > 0) {
-                    printf("Product ID: %d\n", i);
-                    printf("Line Code: %d\n", j);
-                    printf("Issue Code: %d\n", k);
-                    printf("Count: %d\n", issueReport[i][j][k]);
-                }
-            }
-        }
+void displayIssueReport(struct department **issueReport) {
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        printf("Product ID: %d, ", issueReport[i]->productID);
+        printf("Issue Code: %d, ", issueReport[i]->issue.code);
+        printf("Line code: %d\n", issueReport[i]->lineCode);
     }
 } // end displayIssueReport
