@@ -1,7 +1,7 @@
 /*
 Programs Description: This program demonstrates
     (1) sorting line logs by product ID, issue code, and date/time
-    (2) sorting the files according to issue code, then line code
+    (2) sorting the files according to product id, then line code
     (3) searches for the first occurence of an issue code
     (4) finds the number of issues per product id
 
@@ -246,8 +246,8 @@ void issueMerge(struct department **emp, int low, int mid, int high) {
     // merges the temp arrays back to emp
     while (i < ptrL && j < ptrR) {
         // compares the values by date and time
-        if (LEFT[i].issue.code < RIGHT[j].issue.code || 
-        LEFT[i].issue.code == RIGHT[i].issue.code && LEFT[i].lineCode < RIGHT[i].lineCode) {
+        if (LEFT[i].productID < RIGHT[j].productID || 
+        LEFT[i].productID == RIGHT[i].productID && LEFT[i].lineCode < RIGHT[i].lineCode) {
             *emp[k++] = LEFT[i++];
 
         } else {
