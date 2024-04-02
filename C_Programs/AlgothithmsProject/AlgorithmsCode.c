@@ -41,6 +41,7 @@ struct department {
 };
 
 // function assignments
+void displayDepartment(struct department *);
 void displayIssueReport(struct department **);
 void displaySortedDepartment(struct department *);
 void mergeSort(struct department *, int, int);
@@ -61,19 +62,21 @@ int main() {
         {3, 497, {13, 9, 18.27}, 51, {365, "Issue Desc..."}, {38, "Resolution Desc..."}, 105},
         {5, 297, {2, 3, 11.15}, 18, {104, "Issue Desc..."}, {49, "Resolution Desc..."}, 106},
         {7, 743, {16, 3, 12.45}, 23, {145, "Issue Desc..."}, {96, "Resolution Desc..."}, 109},
-        {9, 392, {5, 9, 21.25}, 39, {115, "Issue Desc..."}, {18, "Resolution Desc..."}, 108},
+        {9, 392, {5, 9, 21.25}, 39, {202, "Issue Desc..."}, {18, "Resolution Desc..."}, 108},
         {1, 487, {18, 12, 8.15}, 21, {165, "Issue Desc..."}, {29, "Resolution Desc..."}, 107},
         {10, 276, {6, 4, 4.55}, 51, {120, "Issue Desc..."}, {18, "Resolution Desc..."}, 110}
-
-
     };
+
+    // displays the unsorted department elements
+    printf("--------Unsorted Data--------\n");
+    displayDepartment(employees);
 
     //TASK 1
     // uses mergeSort to sort the elements in the employees array    
     mergeSort(employees, 0, SIZE - 1);
 
     // displays the sorted department elements
-    printf("--------Sorted Data--------\n\n");
+    printf("--------Sorted Data--------\n");
     displaySortedDepartment(employees);
 
     // TASK 2
@@ -122,6 +125,28 @@ int main() {
     return 0;
 
 } // end main
+
+// displays the unsorted data
+void displayDepartment(struct department emp[]) {
+    int i;
+
+    
+    for (i = 0; i < SIZE; i++) {
+        printf("-----------------------\n");
+        printf("Line Code: %d\n", emp[i].lineCode);
+        printf("Batch Code: %d\n", emp[i].batchCode);
+        printf("Date: %d/%d/2024, Time: %.2f\n", emp[i].batchDateTime.day, emp[i].batchDateTime.month, emp[i].batchDateTime.hourandMin);
+        printf("Product ID: %d\n", emp[i].productID);
+        printf("Issue Code: %d\n", emp[i].issue.code);
+        printf("Issue Description: %s\n", emp[i].issue.description);
+        printf("Resolution Code: %d\n", emp[i].resolution.code);
+        printf("Resolution Description: %s\n", emp[i].resolution.description);
+        printf("Employee ID: %d\n\n", emp[i].employeeID);
+
+    } // end for
+
+} // end displayDepartment
+
 
 // TASK 1
 // uses the merge sort algorithm to sort each variable O(NLog(N))
@@ -311,7 +336,7 @@ void searching(struct department emp[]) {
 
     // checks if the issue code given is in the structure and prints the corresponding product id and line code
     if (key == 1) {
-        printf("Initial occurence --> Product ID: %d, Line Code: %d, Issue Code: %d \n", emp[i].productID, emp[i].lineCode, emp[i].issue.code);
+        printf("Initial Occurrence --> Product ID: %d, Line Code: %d, Issue Code: %d \n", emp[i].productID, emp[i].lineCode, emp[i].issue.code);
     } else {
         printf("Issue Code Invalid\n");
 
